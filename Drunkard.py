@@ -1,9 +1,5 @@
 import time
 import random
-import os
-
-def limpiar_pantalla():
-    os.system('cls' if os.name == 'nt' else 'clear')
 
 while True:
 
@@ -29,8 +25,12 @@ while True:
     def cantar(nombre):
         if nombre_estado[nombre] == 4:
             print(f"{nombre} está cantando...")
+    
+    def ver_tiktok(nombre):
+        if nombre_estado[nombre] == 5:
+            print(f"{nombre} está viendo TikTok")
 
-    acciones = [tomar, usar_baño, llamar_ex, cantar]
+    acciones = [tomar, usar_baño, llamar_ex, cantar, ver_tiktok]
 
     def main():
         for accion in acciones:
