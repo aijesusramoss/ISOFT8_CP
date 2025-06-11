@@ -48,8 +48,7 @@ while True:
                 usar_baño(nombre)
             elif cervezas_tomadas[nombre] == 0:
                 print(f"{nombre} no puede ir al baño, no ha tomado ni una cerveza.")
-            else:
-                print(f"{nombre} quería ir al baño, pero ya está ocupado.")
+                bartender_servir(nombre)
         elif accion == 3:
                 llamar_ex(nombre)
         elif accion == 1:
