@@ -1,43 +1,76 @@
 import time
 import random
 
+# Listas de personas
+mesa1 = ["Carlitos", "Antuna", "Zuñiga", "Cesar", "Ramiro"]
+mesa2 = ["Mariana", "Fernanda", "Lucía", "Valeria", "Sofía"]
+
+# Contador de cervezas por persona
+cervezas_tomadas = {nombre: 0 for nombre in mesa1 + mesa2}
+
+# Acciones
+def bartender_servir(nombre):
+    print(f"Bartender sirviendo cerveza a {nombre}")
+    cervezas_tomadas[nombre] += 1
+    time.sleep(0.5)
+
+def rockola(nombre):
+    print(f"{nombre} eligiendo canción en la rockola...")
+    time.sleep(0.5)
+
+def cantar(nombre):
+    print(f"{nombre} está cantando...")
+
+def bailar(nombre):
+    print(f"{nombre} está bailando...")
+
+# Acciones libres disponibles
+acciones_libres = [cantar, bailar]
+
+turno = 0
+
 while True:
-    #este ciclo permite reasignar valores a cada persona al terminar cada ronda.
+    print("\n========= NUEVO CICLO =========")
 
-    nombre_estado = {"Carlitos": 0, "Antuna": 0, "Zuñiga": 0, "Cesar": 0, "Ramiro": 0} #inicia un diccionario con los nombres de los borrrachos y su estado inicial
-    valores = random.sample(range(1, 6), len(nombre_estado))                           #crea una lista con valores del 1-5 sin repetir
-    nombre_estado = dict(zip(nombre_estado.keys(), valores))                           #le asigna un número a cada persona para que realicen una actividad diferente cada quien
+    if turno % 2 == 0:
+        mesa_cerveza = "mesa1"
+        mesa_rockola = "mesa2"
+    else:
+        mesa_cerveza = "mesa2"
+        mesa_rockola = "mesa1"
 
-    def tomar(nombre): #función para simular que la persona está tomando.
-        if nombre_estado[nombre] == 1:
-            print(f"{nombre} tomando cerveza...")
-            time.sleep(1)
+    def ejecutar_acciones(mesa_nombre, nombres):
+        personas = nombres.copy()
+        random.shuffle(personas)
 
-    def usar_baño(nombre): #función para simular que la persona está yendo al baño
-        if nombre_estado[nombre] == 2:
-            print(f"{nombre} orinando...")
-            time.sleep(1)
-            print(f"{nombre} salió del baño...")
+        acciones = {}
 
-    def llamar_ex(nombre): #función para simular que la persona está llamado a su ex
-        if nombre_estado[nombre] == 3:
-            print(f"{nombre} llamando a su ex...")
+        # Asignar cerveza a una persona si le toca a la mesa
+        if mesa_nombre == mesa_cerveza:
+            elegido = personas.pop()
+            acciones[elegido] = bartender_servir
 
-    def cantar(nombre): #funcion para simular que una persona está cantando
-        if nombre_estado[nombre] == 4:
-            print(f"{nombre} está cantando...")
-    
-    def ver_tiktok(nombre): #funcion para simular que una persona está viendo tiktok
-        if nombre_estado[nombre] == 5:
-            print(f"{nombre} está viendo TikTok")
+        # Asignar rockola a una persona si le toca a la mesa
+        if mesa_nombre == mesa_rockola:
+            elegido = personas.pop()
+            acciones[elegido] = rockola
 
-    acciones = [tomar, usar_baño, llamar_ex, cantar, ver_tiktok]  #lista con las acciones disponibles
-    
+        # Asignar acciones libres a los demás
+        libres = acciones_libres * ((len(personas) + len(acciones_libres) - 1) // len(acciones_libres))
+        for nombre, accion in zip(personas, libres):
+            acciones[nombre] = accion
 
-    def main():
-        for accion in acciones:
-            for nombre in nombre_estado: #ciclo que itera entre los borrachos y las acciones, y asigna acciones a cada uno dependiendo de su estado
-                accion(nombre)
-        print(f'================================Termino El Ciclo ========================================')
+        # Ejecutar acciones
+        for nombre, accion in acciones.items():
+            accion(nombre)
 
-    main()
+    print("\n --- Acciones Mesa 1 --- ")
+    ejecutar_acciones("mesa1", mesa1)
+
+    print("\n --- Acciones Mesa 2 --- ")
+    ejecutar_acciones("mesa2", mesa2)
+
+    print("========= Fin del ciclo =========\n")
+    turno += 1
+    time.sleep(2)
+
